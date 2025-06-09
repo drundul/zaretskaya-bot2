@@ -36,7 +36,11 @@ async def telegram_webhook(req: Request):
     data = await req.json()
     update = Update.de_json(data, bot)
     await application.process_update(update)
-    return "ok"
-# ✅ Запуск Telegram-хендлеров при старте FastAPI
+    return {"ok": True}
+
+# ✅ Запуск Telegram application
 import asyncio
-asyncio.create_task(application.initialize())
+async def run_bot():
+    await application.initialize()
+    await application.start()
+asyncio.create_task(run_bot())
