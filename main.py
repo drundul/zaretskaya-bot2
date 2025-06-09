@@ -15,6 +15,7 @@ application = Application.builder().token(TELEGRAM_TOKEN).build()
 
 logging.basicConfig(level=logging.INFO)
 
+# Команды
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("✨ Привет, я Татьянин помощник. Готова поддержать тебя, дать практику или вдохновение. Спроси меня о чём-то важном 💫")
 
@@ -31,16 +32,10 @@ async def respond(update: Update, context: ContextTypes.DEFAULT_TYPE):
 application.add_handler(CommandHandler("start", start))
 application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, respond))
 
+# Обработка webhook'а
 @app.post("/webhook")
 async def telegram_webhook(req: Request):
     data = await req.json()
     update = Update.de_json(data, bot)
     await application.process_update(update)
     return {"ok": True}
-
-# ✅ Запуск Telegram application
-import asyncio
-async def run_bot():
-    await application.initialize()
-    await application.start()
-asyncio.create_task(run_bot())
