@@ -37,3 +37,6 @@ async def telegram_webhook(req: Request):
     update = Update.de_json(data, bot)
     await application.process_update(update)
     return "ok"
+# ✅ Запуск Telegram-хендлеров при старте FastAPI
+import asyncio
+asyncio.create_task(application.initialize())
